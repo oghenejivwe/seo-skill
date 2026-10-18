@@ -33,9 +33,19 @@ pages:
     traffic_potential: 0        # sum of cluster volume
     intent: commercial          # informational | commercial | transactional | navigational
 
+    # The three places Google reads to decide what this page is about.
+    # All three carry primary_keyword, and all three are written HERE, in
+    # phase 2, not discovered later while drafting. scripts/plan_check.py
+    # blocks phase 3 until they are filled.
     title: ""                   # <= 60 chars, keyword front-loaded, unique sitewide
     h1: ""                      # mirrors the title. not a tagline
-    meta: ""                    # 150-160 chars, ends with a reason to click
+    lede: ""                    # the first sentence of body copy, rendered as
+                                # the first <p> under the H1 and ABOVE any
+                                # interface. Answers the query in one sentence.
+                                # This is the slot template furniture steals.
+    meta: ""                    # 150-160 chars, ends with a reason to click.
+                                # Not a ranking factor -- Google rewrites many
+                                # of them -- but free to do while you are here
 
     parent: null                # url of the page above this one
     links_to: []                # editorial links OUT, in body copy, not nav

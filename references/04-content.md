@@ -21,7 +21,13 @@ traffic potential      sum of cluster volume
 intent                 informational / commercial / transactional
 page type              from structure.yaml
 code path              the thing that actually serves this query
+
+title                  from structure.yaml. carries the primary keyword
+h1                     from structure.yaml. carries the primary keyword
+lede                   from structure.yaml. carries the primary keyword
 ```
+
+**The last three arrive already decided.** Phase 2 wrote them and `scripts/plan_check.py` passed them, so drafting does not get to invent a title or wander into a different opening sentence. If a page genuinely needs different ones — the SERP read in part 2 changes what the page should be — change them in `structure.yaml`, re-run the check, and carry on. Never only in the draft, or the plan and the page quietly disagree about what the page is for.
 
 ### 2. From the SERP
 
@@ -154,11 +160,17 @@ ai-writing      sentence-length spread, em dashes, "rather than" / "not just"
 
 ### The three places that matter most
 
+Every page carries its target phrase in all three. No page ships without them.
+
 1. **The title tag**
 2. **The H1**
 3. **The first sentence of body copy, as rendered**
 
-A thirty-second edit per page. It won't guarantee a ranking; its absence reliably costs impressions.
+The URL is worth including when it is still being decided, and the meta description is free to fill while you are in there — but Google rewrites a large share of meta descriptions, so neither carries the same weight as these three.
+
+Both ends are enforced, deliberately. `scripts/plan_check.py` blocks the plan before a page is written; `scripts/lint.py` blocks the page afterwards, at error level, checking the rendered HTML rather than the template. Passing the first and failing the second means the template moved something — almost always interface copy landing in the first `<p>`.
+
+Stating the limit honestly: three string edits do not guarantee a ranking, and claiming otherwise would be dishonest. What they do is remove an ambiguity you control. A page that never names its own subject in the places Google looks is leaving clicks and impressions on the table for no reason, and the edit takes about thirty seconds.
 
 ---
 

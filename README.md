@@ -41,6 +41,8 @@ Phases 0 to 6 run once. Phase 7 runs forever, and it is where most of the rankin
 
 **The question worth asking depends on how old the page is.** At a week, only indexing. At two to three weeks, what Search Console says people actually typed. Positions mean nothing until about three weeks, because new pages get a few good days then settle back.
 
+**The target phrase goes in three places on every page** — the title tag, the H1, and the first sentence of body copy. Enforced at both ends: the plan is gated before a page is written, the rendered page is checked after. The opening line is the one that gets missed, because template furniture usually occupies that slot and a "keyword in the first 100 words" check passes anyway.
+
 **Prose is delegated.** All writing goes through a companion `no-ai-tells` skill before a page counts as done. If you do not have one, the skill will say so rather than writing unchecked copy — any two-pass editor that drafts on substance first and hunts the usual tells second will do.
 
 ## Scripts
@@ -51,6 +53,7 @@ Standard library only, no dependencies.
 |---|---|
 | `scripts/audit.py` | robots.txt and AI crawler access, JS render test, sitemap, PageSpeed, schema, duplicate-body detection across the whole sitemap |
 | `scripts/lint.py` | per-page on-page rules — the three kings, FAQ answer openers, AI-writing tells, link resolution — with autofix where it is safe |
+| `scripts/plan_check.py` | gates the page plan — every page must carry its keyword in the title, H1 and opening line before anything is written |
 | `scripts/review.py` | ranks what to improve next from a Search Console CSV export |
 
 `review.py` needs no credentials. The export is a button in the Search Console UI.

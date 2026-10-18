@@ -81,6 +81,24 @@ The tell at this stage is two clusters whose SERP results overlap heavily. If th
 
 ---
 
+## Every page declares its three kings before it is written
+
+Each page gets a `title`, an `h1` and a `lede` in the plan, every one of them carrying that page's `primary_keyword`, filled in at the same time as the URL.
+
+These are the three places Google reads to work out what a page is about: the title tag, the H1, and the first sentence of body copy. The URL helps and the meta description is worth filling while you are there, but Google rewrites a large share of meta descriptions, so neither is the same kind of signal.
+
+The reason this sits in phase 2 and not phase 3 is cost. Choosing the opening sentence while you are choosing the URL takes seconds. Finding out afterwards that a page never states its own subject means rewriting copy that is already written, already reviewed, possibly already indexed. Identical edit, two wildly different prices.
+
+**The lede is the one that gets missed.** On most tool and app pages the first `<p>` under the H1 is template furniture — a trust line, a privacy claim, an upload hint. The target phrase turns up somewhere further down, so a "keyword in the first 100 words" check passes happily while the sentence Google reads first says nothing about the topic. Plan the lede as real copy, rendered above the interface.
+
+Nobody is claiming three string edits move a page on their own. The claim is narrower and safer: a page without its target phrase in these three places is ambiguous about its own subject, and it gives up clicks and impressions for no reason at all.
+
+```bash
+python scripts/plan_check.py seo/structure.yaml
+```
+
+Run it before phase 3. It fails the plan if a page is missing any of the three, if a lede reads as interface text, or if two pages claim the same title. It shares its keyword matching with `scripts/lint.py` on purpose — if the two disagreed, a plan could pass here and fail there.
+
 ## Output
 
 ```yaml
@@ -94,6 +112,7 @@ pages:
     primary_keyword: <cluster head>
     title: <= 60 chars, keyword front-loaded
     h1: mirrors the title
+    lede: first sentence of body copy, carries the keyword, above the interface
     cluster: <cluster id from keywords.csv>
     parent: null
     links_to: [/features/thing, /pricing]
@@ -105,6 +124,7 @@ pages:
     secondary_keywords: [...]
     title: ...
     h1: ...
+    lede: ...
     cluster: ...
     parent: /
     links_to: [/compare/thing-vs-other]
@@ -117,3 +137,5 @@ pages:
 ## Before moving on
 
 Show the user the full page list with the URL, the intent it owns, and the traffic potential behind it. This is the last cheap moment to say "we don't need that one" or "where's the page for X".
+
+Then run `scripts/plan_check.py`. **Phase 3 does not start until it exits clean** — writing pages against a plan that fails it just schedules the rewrite.
