@@ -48,6 +48,10 @@ CRAWLER_UAS = {
 # Hosting-provider error pages. These return 200 sometimes, so status alone misses them.
 HOST_ERRORS = [
     (r"modal-http:.*is disabled", "Modal workspace disabled"),
+    (r"\brender\b.*(service suspended|not found)", "Render service down"),
+    (r"fly\.io.*(could not find app|no active)", "Fly.io app not running"),
+    (r"railway.*(application (failed|error))", "Railway app error"),
+    (r"The requested URL was not found on this server\.", "Cloud Run / generic 404 body"),
     (r"\bDEPLOYMENT_NOT_FOUND\b", "Vercel deployment missing"),
     (r"Application error.*Heroku", "Heroku application error"),
     (r"Not Found - Request ID", "Netlify deploy missing"),

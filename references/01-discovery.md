@@ -66,6 +66,41 @@ often a spreadsheet, a notepad, or an agency.
 pre-launch / live with no traffic / live with traffic
 ```
 
+## Finding the competitors you don't know about
+
+Start with the three to five you can name, and expect the real list to be
+longer. The sites you can name are the ones you compete with consciously. The
+ones taking searches nobody on the project has thought about are, by
+definition, missing from that list.
+
+**Similarweb's similar-sites, on a free trial, is the best competitor
+discovery available for nothing.** It returns around 40 sites per domain.
+Feed it the three to five you already know and let it fill in the rest: on one
+project it surfaced nine competitors the earlier research had missed.
+
+Two things on the trial are worth taking before it ends:
+
+- **Similar sites**, run per domain. Run it on each known competitor as well
+  as on your own site. Where several of their lists overlap, that is the real
+  category.
+- **Country order**, under Audience -> Geography. The top five countries are
+  visible; the percentages are not. The ordering alone is enough to set which
+  markets get worked first, and on a site with no traffic of its own it beats
+  guessing.
+
+What the trial will not give you: keyword lists and per-country breakdowns are
+locked behind paid packages, and a site's search overview shows only a handful
+of its top keywords. So it is a discovery tool and not a volume source.
+Volumes come from Keyword Planner, covered in `references/keyword-planner.md`.
+
+**The trial runs about a week, so open it on day one** and finish the
+similar-sites and geography pass inside that week. Left until later in a
+project, it is either paid for or skipped.
+
+Every competitor the pass turns up becomes a Keyword Planner "Start with a
+website" run in phase 1 - one run per domain. That is what the competitor list
+is for, and `references/keyword-planner.md` has the procedure.
+
 ## The stage question changes everything
 
 Ask, or infer, and record it — the rest of the skill branches on this.

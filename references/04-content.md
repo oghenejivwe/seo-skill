@@ -91,7 +91,7 @@ So the check is quality per page, applied to every page.
 [ ] every FAQ answer opens with the answer
 ```
 
-**Batches or all at once — the founder chooses.** The default is one batch per page type: all the audio pages, then all the platform pages, at any size. Each batch's Search Console data then shows which page types get indexed and draw impressions before the next batch is written. **The user approves each batch, not each page.**
+**Batches or all at once — the founder chooses.** The default is one batch per page type: all the converter pages, then all the integration pages, at any size. Each batch's Search Console data then shows which page types get indexed and draw impressions before the next batch is written. **The user approves each batch, not each page.**
 
 ### Matrix pages carry the most risk
 

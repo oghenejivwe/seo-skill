@@ -36,6 +36,40 @@ The warning in `03-architecture.md` against a page per keyword still stands. Sca
 
 A new site picks up queries in Search Console far faster than it gains pages, and most of what arrives belongs on a page that already exists. Expect distinct queries to outnumber your pages by an order of magnitude within the first month.
 
+### The five groups
+
+Every untargeted keyword in the bank belongs to one of five groups. Sorting them is the work; the briefs fall out of it.
+
+**1. Close variants of a page that exists.** Wording on that page, never a new page. Leave the URL, title, H1 and first sentence alone — they already rank for the page's own target, and rewriting them to chase a variant risks what works. Add the strongest variant in the second sentence, one H2, two or three FAQ questions, and optionally the meta description after the main keyword. Stop at six variants a page; past that the copy reads as stuffing. A second page aimed at the same search competes with the first, and a set of near-identical pages is what a doorway page looks like from outside. `scripts/variant_map.py` does this mapping, from an ordered list of pattern -> page rules.
+
+**2. New pages for services the product already has.** New languages, new platforms, new phrasings of a job the code already does. The fastest group to turn into briefs, because gate 1 is already passed.
+
+**3. New tools it could add cheaply** on an engine that already exists — another format pair on a converter whose pipeline is already there.
+
+**4. Services it does not offer.** Put these to the user with their size attached and let them decide. The size is the reason to show them at all, and the call is a product call rather than an SEO one. Do not make it in either direction on their behalf.
+
+**5. Searches nobody can win.** Other companies' brands, jobs, generic junk. Onto the reject list with the reason.
+
+`scripts/gap_report.py` writes the full list, one search a line with its volume range, its market and the nearest existing page.
+
+### The open-gap test
+
+A keyword is an **open gap** when it has volume, no page here targets it, and it appears in no competitor's Planner website-ideas export.
+
+State the limits with the finding. Planner builds a site's idea list from that site's own pages, so absence means their pages do not cover that wording — it does not prove nobody ranks. A competitor ranking on a page the crawl missed, a forum thread or a video all sit inside an "open" gap. The test only runs in the markets where competitor ideas were actually pulled; a market with no competitor export is untested rather than clear, and a report that mixes the two flatters itself.
+
+Inside those limits it is the best ordering signal the bank has, because it splits searches with no incumbent page off the long flat list of everything untargeted. In the run this came from it surfaced the first brief's worth of pages.
+
+### Before rewording a live page
+
+Two checks, both before touching copy that already ranks.
+
+**Compare the volumes.** Put the new phrase's volume next to the volume of the page's original target, which the page register keeps as page -> brief -> main target -> volume. Roughly equal numbers mean Google treats them as the same search, so the page already covers it and the edit risks a ranking for no gain.
+
+**Read the page's Search Console queries.** If the phrase is already bringing that URL impressions, there is nothing here to find.
+
+The trap is that these rows look like the most attractive finds in the bank, because they carry the biggest numbers. `variant_map.py` flags them instead of proposing them.
+
 ---
 
 ## Scaling the research
@@ -44,7 +78,7 @@ Three things change when the list runs to thousands.
 
 **Cluster by pattern first.** Group by the shape of the query — format pairs, platforms, languages, question forms — and only run SERP-overlap checks where a pattern is genuinely ambiguous. Fetching ten results for each of ten thousand keywords is not practical on free sources, and most of those fetches would confirm something the pattern already told you.
 
-**Use a bulk volume source.** Google Ads Keyword Planner is free with an Ads account and handles thousands of terms. DataForSEO is the paid alternative. Trends and autocomplete are for spot checks, not for bulk.
+**Volumes come from Keyword Planner.** It is free with a Google Ads account and takes thousands of phrases in one upload, which is what makes a bank of tens of thousands possible at all. Free volume APIs, autocomplete and Trends still have a job: discovery between runs, and spot checks. Not bulk. The runs go in a fixed order — *The harvest order* below — and the procedure for each is in `references/keyword-planner.md`.
 
 **Past 1,000 rows, use the API.** Search Console's Performance table and its export both stop at 1,000 rows. The Search Analytics API returns up to 25,000 rows per request, paged with `startRow`, up to 50,000 rows a day per search type. Google documented these limits in its October 2022 post *A deep dive into Search Console performance data filtering and limits*.
 
@@ -62,7 +96,19 @@ Three things change when the list runs to thousands.
 
 ## Harvest
 
-### Capability-gap harvest — start here
+### The harvest order
+
+Run these in order. Each step feeds the next, and out of order you repeat work.
+
+1. **Competitor discovery with Similarweb similar-sites.** Start from the three to five competitors you already know and read the similar-sites list for each, which surfaces the ones you do not. This has to be first, because every competitor it finds becomes a Planner run in step 2. In the run this came from it added nine competitors the earlier research had missed.
+2. **Planner competitor keyword ideas, one run per competitor domain.** The biggest lists in the harvest — commonly 800–2,000 ideas a site, under 200 for a competitor with thin public pages. Keep each competitor's export as its own file: it is the input to the open-gap test further down.
+3. **Planner local keyword ideas per market**, ten seeds a run in the local language. The seeds are the product's core jobs written the way natives search them, not translated from English. The capability list below is where they come from.
+4. **Planner volumes for everything still waiting**, one upload per market, after close variants are merged so the upload is shorter.
+5. **Free APIs, autocomplete and Trends for discovery between runs and for spot checks only.** They are no longer the volume source.
+
+Steps 2 and 3 arrive with volumes already attached, so step 4 only has to cover the phrases earlier research guessed at. Account setup, the range buckets, the per-market settings and the browser quirks are all in `references/keyword-planner.md`.
+
+### Capability-gap harvest — where the seeds come from
 
 Turn the phase-0 capability list into a harvest source. Every capability, every user-facing setting, every input and output format, every upload path, with the phrases people would type for it. Mark each one **page exists** or **no page**.
 
@@ -107,6 +153,8 @@ These worked from an automated session in October 2026.
 | Source | Gives | Reach it | Limits |
 |---|---|---|---|
 | **Google Search Console** | Real queries, impressions, clicks, CTR, position, indexing status, external links | Performance report URL params: `start_date=YYYYMMDD&end_date=YYYYMMDD` or `num_of_days=7/28/90`, `metrics=CLICKS%2CIMPRESSIONS%2CCTR%2CPOSITION`, `breakdown=page`. 500 rows a page | Lags 2–3 days. Table and export stop at 1,000 rows. Needs the account holder's login |
+| **Google Ads Keyword Planner** | Volumes for thousands of phrases per upload, and keyword ideas from any competitor domain. The main volume source | Free with a Google Ads account and no campaign. Procedure in `references/keyword-planner.md` | Without ad spend the volumes are ranges, not exact numbers. Location defaults to the account's country and language to English on every single run |
+| **Similarweb free trial** | Similar sites, about 40 a domain, which is the best competitor discovery found. Top five countries under Audience -> Geography, which sets the market order | A trial of about a week on an account the user opens themselves | Keyword lists are locked. Per-country detail is locked. Use it in the first week or not at all |
 | **seodata.dev** | US monthly volumes from Google Ads data; other countries via API; an **overlap score (x/20)** that says whether two keywords share results — a free clustering signal | `https://www.seodata.dev/keyword/TERM-WITH-HYPHENS`; API `https://api.seodata.dev/v1/keyword?q=TERM&country=us` (also `id`, `br`, `mx`) | Free quota ran out inside one session. No difficulty score. Some terms have no data. Label as estimates |
 | **Google Trends** | Relative demand on one scale, worldwide or by country | `trends.google.com/trends/explore`, exact phrases in quotes, five terms per request | Relative only. Returned 429 once; 60 seconds cleared it |
 | **Google Autocomplete** | Whether people type a phrase, and its variants | `https://suggestqueries.google.com/complete/search?client=firefox&q=TERM`, plus `&hl=LANG&gl=COUNTRY` | **Silently drops any query containing a word on its profanity list**, so a keyword with an unfortunate substring looks dead while paid tools show real volume for it. A missing suggestion proves nothing |
@@ -130,9 +178,17 @@ Ahrefs' free tools (Keyword Generator, Difficulty Checker, Traffic Checker) sit 
 
 An agent's built-in web search can return no result at all for a page that Search Console shows ranking in the top two. The index behind it is not Google's, and for long-tail or recently published pages the gap is wide. Treat agent search as a proxy and say so in any output that relies on it.
 
-### Not used yet, worth setting up
+### Did not pan out
 
-Google Ads Keyword Planner — free with an Ads account, and the bulk volume source the scaled list needs. DataForSEO — pay-as-you-go from a $50 deposit, standard-queue SERP request $0.0006. Bing Webmaster Tools — free, gives Bing's own query data.
+Recording what failed is worth as much as recording what worked, because the next run otherwise spends the same hours finding out again.
+
+- **A pay-as-you-go SERP API.** The signup credit cannot be spent until a $50 deposit lands, so the free credit is not usable at all.
+- **The Similarweb trial's keyword lists.** Shown as locked, available in custom packages only. The search overview gives a site's top five keywords and stops there.
+- **A free volume API.** About 50 lookups a day. Enough for a spot check, nowhere near a bank in the thousands.
+
+### Still worth setting up
+
+Bing Webmaster Tools — free, and it gives Bing's own query data.
 
 ---
 
@@ -142,6 +198,50 @@ Volume, cost per click, SERP features, and — if live — your current position
 
 Cost per click is an intent signal rather than an advertising metric: it says whether this traffic converts for somebody. No advertisers at all is a warning more often than an opportunity.
 
+### Close variants are one search
+
+Google Ads gives close variants the same number, because to Google they are the same query. "png to webp converter" and "convert png to webp" share one volume between them, so a bank holding both claims two searches worth of traffic for one, and a plan built on that bank ships two pages for one query.
+
+Merge before counting and before uploading. The canonical form:
+
+```
+accents off
+plural s stripped from words over three letters
+articles dropped
+words sorted
+```
+
+Keep the highest-volume spelling as the one that survives, and the shorter phrase on a tie. This is `canon()` in `scripts/kwlib.py`, and both `gap_report.py` and `variant_map.py` import it, so the two reports cannot disagree about what counts as one search.
+
+### Normalising non-Latin text
+
+Two rules, both learned by getting them wrong.
+
+**Keep the combining marks.** Devanagari and Thai vowel signs are not word characters in most regex engines, so a normaliser that splits on non-word characters cuts every word in those scripts into fragments. The fragments match nothing and the market reads as empty.
+
+**Compare non-ASCII phrases with spaces removed.** Google puts spaces inside Japanese and Chinese keywords where a page's own target does not. Compare them as written and pages you already have come back as gaps.
+
+### The on-topic filter has to speak every target market's language
+
+A filter written in English discards whole markets. In the run this came from, 528 of 547 ideas in one non-Latin market were thrown out until that language's words went into the filter. The keywords were on topic throughout; the filter could not read them.
+
+So `media_words` in the config carries one block of words per language, and the rules that pair an action word with the thing it acts on — `on_topic`, and any `off_intent` rule whose `unless` is `MEDIA` — are only as good as that block. An action word alone is ambiguous. Paired with a format or object word in the same language the local phrasing survives; with that language missing from `media_words`, every local phrasing of a service the product has is thrown out as something else.
+
+### Mark what the product cannot serve
+
+Searches the product has no answer for keep showing up as gaps until they are marked off-intent. Each rule has two halves:
+
+```
+trigger   the words that make a search suspect
+unless    the words that make it ours after all
+```
+
+A download search wants somebody else's file, unless it names a format the product handles. An edit search is an editing product, unless it is paired with convert. Alongside those sit flat lists for jobs and definitions, other companies' brand names, and phrases made only of generic words.
+
+These lists describe one product, so review them on every project. A rule carried over from another project will quietly drop searches the new one can serve. In the run this came from they cut the untargeted count by roughly a fifth, from 6,175 to about 4,800, and most of what remained was real.
+
+Keep all of it out of the scripts. The vocabulary is data: `seo/keywords.config.json`, built from `assets/keywords.config.example.json` and loaded by `scripts/kwlib.py`.
+
 ---
 
 ## Cluster
@@ -150,7 +250,7 @@ Pattern first, SERP overlap where the pattern is ambiguous.
 
 ```
 pattern groups:   format pairs      png→webp, webp→png, heic→jpg …
-                  platforms         youtube, vimeo, zoom …
+                  integrations      google drive, dropbox, onedrive …
                   languages         per-market variants
                   question forms    "how do i …", "can you …"
 
@@ -158,6 +258,8 @@ then, only where unclear:
     fetch top 10 for each keyword
     group where >= 4 URLs are shared
 ```
+
+Close variants are merged on `canon()` before any of this runs, so a pattern group holds distinct searches instead of four spellings of one.
 
 Each group is one search intent. Name it after its highest-traffic-potential member.
 
@@ -263,6 +365,8 @@ Skip this tier if the site is new and nothing ranks yet.
 
 This is the tier that produces results like a working capability sitting behind a 2,900/month search with no page pointing at it. The settings schema is the same mine — every option is somebody's search.
 
+Inside the tier, open gaps come first. No incumbent page to outrank is worth more than a slightly bigger number.
+
 **Tier 2 — money pages that don't exist.** Build the pages that convert before the pages that feed them. Informational content shipped first produces traffic with nowhere to go, which is the standard way to waste a quarter.
 
 **Tier 3 — one cluster, finished.** Not the ten best-scoring keywords scattered across eight topics. Pick the cluster that feeds your strongest money page and build all of it.
@@ -285,7 +389,7 @@ This is the tier that produces results like a working capability sitting behind 
 
 Score says what is worth doing. Page type says what to do **together**.
 
-Ship all the audio pages, then all the platform pages — not the twenty highest-scoring pages spread across eight types.
+Ship all the converter pages, then all the integration pages — not the twenty highest-scoring pages spread across eight types.
 
 The reason is feedback, not rate limiting. After each batch the Page Indexing report tells you something specific: these got indexed, those didn't. If the batch was one page type you have learned whether that template works. If it was scattered you have learned nothing you can act on.
 
@@ -315,4 +419,6 @@ current_position, current_url, parent_topic, code_path, decision, notes
 
 `decision` is **build**, **later**, or **skip**. Everything skipped keeps its reason, so the same keyword doesn't get researched twice.
 
-Then show the user the clusters sorted by traffic potential. **They approve batches, not a capped list** — typically one batch per page type. Business fit is the one thing only they can score.
+Two reports sit beside it, regenerated after every harvest: the untargeted list with its open-gap column from `gap_report.py`, and the variant map plus new-page candidates from `variant_map.py`. The CSV is the bank; the reports are what you read.
+
+Then show the user the clusters sorted by traffic potential, and the five groups with their sizes. **They approve batches, not a capped list** — typically one batch per page type. Business fit is the one thing only they can score, and group 4 is theirs alone.

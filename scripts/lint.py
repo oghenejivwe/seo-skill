@@ -163,8 +163,12 @@ class Page(HTMLParser):
         return out
 
 
-def norm(s):
-    return re.sub(r"[^a-z0-9 ]", " ", (s or "").lower())
+# norm comes from kwlib so there is exactly one definition. lint used to keep
+# its own, which was re.sub(r"[^a-z0-9 ]", " ", ...) -- that deletes every
+# non-Latin character, so has_kw() returned False for a Japanese or Hindi page
+# that carried its keyword correctly, and plan_check blocked a sound plan.
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+from kwlib import norm, nospace  # noqa: E402
 
 
 def has_kw(hay, kw, loose=True):

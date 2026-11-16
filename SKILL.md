@@ -61,11 +61,19 @@ Output `seo/project.md`.
 
 ### Phase 1 — Keywords
 
-Read `references/02-keywords.md`.
+Read `references/02-keywords.md`, and `references/keyword-planner.md` for the procedure.
+
+**Volumes come from Google Ads Keyword Planner, free, and the harvest runs in a fixed order:** competitor discovery first (Similarweb's similar-sites finds the competitors you don't know about), then Planner keyword ideas one run per competitor domain, then Planner local ideas per market with seeds in the local language, then Planner volumes for whatever is still waiting. Free APIs, autocomplete and Trends are for discovery between runs and spot checks — they are no longer the volume source, because they cap out around fifty lookups a day.
+
+Keyword Planner needs a Google Ads account with **no campaign**, which costs nothing. Never enter payment details and never create one. Without ad spend the volumes arrive as ranges, so store each bucket's lower bound and keep the range name alongside it — otherwise a range quietly outranks a measured number.
 
 **There is no cap on the list.** A thousand keywords is fine, ten thousand is fine. What limits it is fit: the product genuinely does the job, the results page shows pages like the one we'd build, and there's a realistic chance to rank. Most keywords join a page that already exists as an FAQ or a section rather than getting one of their own.
 
 The method differs from most keyword advice in several ways the reference explains: start the harvest from the product's own capabilities and settings rather than from a seed, cluster by **pattern first and SERP overlap where ambiguous**, score **clusters** rather than keywords, check **parent topic** before creating a page, and **trace the code path** before committing to build.
+
+Two rules decide whether the bank is usable. **Close variants are one search** — Google gives them the same volume, so merge them before counting or uploading. And **the on-topic filter has to speak every market's language**: written in English it silently discards whole markets, so the filter lives in a per-project config rather than in code. `assets/keywords.config.example.json` is the shape; `scripts/kwlib.py` reads it.
+
+Every untargeted keyword then sorts into five groups, and the first one matters most: a close variant of a search an existing page already targets gets **wording on that page, never a page of its own**. A second page for the same search competes with the first and reads as a doorway page.
 
 Output `seo/keywords.csv`.
 
@@ -170,11 +178,16 @@ When a finding sends you back to phase 1 or 2, **append rather than regenerate**
 | `references/07-local.md` | Only if the project has a physical location |
 | `references/08-aeo.md` | Phase 3, for AI search visibility |
 | `references/09-review.md` | Phase 7 — the recurring loop, and how to read it honestly |
+| `references/keyword-planner.md` | Phase 1 — Keyword Planner and Similarweb, step by step |
 
 | Script | Does |
 |---|---|
 | `scripts/audit.py` | robots.txt and AI crawlers, JS render test, sitemap, PageSpeed, schema |
 | `scripts/lint.py` | per-page on-page rules, with autofix where it's safe |
+| `scripts/kwlib.py` | shared keyword handling: normalise, merge close variants, classify |
+| `scripts/planner_import.py` | Keyword Planner export (UTF-16, tab-separated) -> clean CSV |
+| `scripts/gap_report.py` | untargeted searches, plus the open-gap test against competitors |
+| `scripts/variant_map.py` | which existing page absorbs a variant, and what to leave alone |
 | `scripts/plan_check.py` | gates the plan: keyword in every page's title, H1 and lede |
 | `scripts/review.py` | ranks what to improve next from Search Console exports |
 
@@ -182,3 +195,4 @@ When a finding sends you back to phase 1 or 2, **append rather than regenerate**
 |---|---|
 | `assets/structure.schema.yaml` | The shape of `seo/structure.yaml` |
 | `assets/LAUNCH.template.md` | The post-launch checklist dropped into the project |
+| `assets/keywords.config.example.json` | The shape of the per-project keyword filter config |

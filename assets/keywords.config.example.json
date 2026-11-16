@@ -1,0 +1,60 @@
+{
+  "_about": "Example only: an image and document format converter (png, webp, heic, pdf, docx). Copy this to seo/keywords.config.json and replace every list with the vocabulary of the product you are working on. Keys starting with _ are ignored.",
+  "_languages": "media_words must be written in every language the project targets. English-only lists make a non-English market look empty instead of unfiltered. Three languages are shown here; add one block of words per market.",
+
+  "markets": {
+    "us": "United States",
+    "es": "Spain",
+    "jp": "Japan"
+  },
+
+  "media_words": [
+    "\\b(png|jpe?g|webp|heic|heif|avif|gif|tiff|bmp|svg|pdf|docx?|pptx?|xlsx?|epub|rtf)\\b",
+    "\\b(image|images|photo|photos|picture|document|documents|file|files|scan|page)\\b",
+    "(imagen|imagenes|imágenes|foto|fotos|documento|documentos|archivo|archivos|pagina|página)",
+    "(画像|写真|書類|文書|ファイル|資料|ページ)"
+  ],
+
+  "on_topic": [
+    "\\b(convert|converter|conversion|compress|resize|crop|rotate|merge|split|optimi[sz]e)\\b",
+    "(convertir|conversor|comprimir|redimensionar|recortar|unir|dividir|optimizar)",
+    "(変換|圧縮|サイズ変更|結合|分割|トリミング)",
+    "\\bto (png|webp|pdf|docx|jpe?g)\\b",
+    "(png|webp|heic|pdf|docx)"
+  ],
+
+  "off_intent": [
+    {
+      "_why": "a download search wants somebody else's file, unless it names a format we handle",
+      "trigger": "\\b(download|downloader|descargar|ダウンロード)\\b",
+      "unless": "MEDIA"
+    },
+    {
+      "_why": "the verb alone is an editing product; paired with a format it is a conversion search",
+      "trigger": "\\b(edit|editor|editing|retouch|editar|編集|加工)\\b",
+      "unless": "(convert|convertir|変換|compress|comprimir|圧縮)"
+    },
+    {
+      "_why": "printing and shipping a document is a print shop, not a converter",
+      "trigger": "\\b(print|printing|printer|imprimir|impresora|印刷)\\b",
+      "unless": "\\b(to pdf|pdf printer|print to file)\\b"
+    }
+  ],
+
+  "cant_serve": [
+    "\\b(jobs?|salary|hiring|career|internship|freelance rates?)\\b",
+    "\\b(meaning|definition|what does .* stand for|significado|意味)\\b",
+    "\\b(driver|drivers|scanner driver|firmware|plugin for)\\b",
+    "\\b(course|tutorial for beginners|certification|curso)\\b"
+  ],
+
+  "brands": [
+    "\\b(photoshop|illustrator|lightroom|acrobat|adobe|canva|figma|affinity)\\b",
+    "\\b(google (docs|drive|photos)|microsoft (word|office)|apple preview|paint\\.?net|gimp)\\b"
+  ],
+
+  "generic": [
+    "file", "files", "image", "images", "photo", "document", "online", "free",
+    "best", "app", "tool", "the", "a", "to", "for", "and", "in", "on", "my"
+  ]
+}

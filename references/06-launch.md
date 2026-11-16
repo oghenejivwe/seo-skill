@@ -82,7 +82,7 @@ The case to watch for: a hosting account is suspended or a workspace disabled, a
 
 Manual indexing requests run about ten a day. That cannot cover thousands of pages, so it isn't the mechanism.
 
-**The mechanism is the sitemap with accurate `lastmod`, plus links from pages Google has already indexed.** Spend the manual requests on the most valuable new pages and on pages with queries sitting at positions 5–15.
+**The mechanism is the sitemap with accurate `lastmod`, plus links from pages Google has already indexed.** Spend the manual requests on the most valuable new pages and on pages with queries sitting at positions 5–15. "Most valuable" has a specific order, set by volume - see "Order the indexing queue by volume" under Weeks two to four.
 
 Two things that are no longer true and are still widely repeated:
 
@@ -132,11 +132,39 @@ A rising "crawled – currently not indexed" count is the most useful early warn
     metrics on, and compute per-query movement
 [ ] Let Search Console rename your pages (below)
 [ ] Triage the indexing report (above)
+[ ] Re-rank the indexing queue by volume after every harvest (below)
 [ ] Get listed where this category gets compared — roundups,
     directories, comparison posts
 [ ] Answer real questions in the communities your users are in.
     Say who you are and where you work.
 ```
+
+### Order the indexing queue by volume
+
+Ten Request-indexing calls a day is the scarcest resource in this skill, so
+the order of the queue matters more than what is in it. Re-rank it after every
+keyword harvest:
+
+1. Pages whose target has a measured volume, highest first
+2. Pages whose target has not been measured yet
+3. Pages measured at zero
+
+Read the volumes from every source available, not whichever one is nearest:
+`seo/keywords.csv`, plus any volume or "Searches" column in the page
+briefs. Build the register from one of them and a page ranks as unmeasured
+while its number sits in the other.
+
+Why the pass earns its time: on one project a page targeting a 100K-1M-a-month
+search had never been crawled, and sat at position 105 of a 155-page queue
+until the harvest numbers moved it to first. An unordered queue spends ten
+requests a day on whatever happened to be added last.
+
+Two kinds of page compete for those requests. Pages already sitting in
+positions 5-15 after an edit come first, because Google has rated them and a
+re-index can move them this week. The volume ordering governs everything that
+has never been crawled, which on a new site is most of the queue. Both are
+part of the phase 7 loop rather than a one-off: harvest, re-rank, spend. See
+`09-review.md` for the cadence.
 
 ### Noise rules
 

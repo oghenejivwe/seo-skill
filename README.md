@@ -31,6 +31,14 @@ Phases 0 to 6 run once. Phase 7 runs forever, and it is where most of the rankin
 
 **It reads the code, not the marketing copy.** Landing pages systematically overstate what a product does. Derive keywords from the homepage and you inherit the overstatement, then build pages that rank, get clicked and bounce. Bouncing is worse than not ranking.
 
+**Volumes come from Google Keyword Planner, free, in a fixed order.** Competitor discovery first, then one Planner run per competitor domain, then local ideas per market seeded in the local language, then volumes for the remainder. An account with no campaign costs nothing. Free volume APIs cap out around fifty lookups a day, so they are for discovery and spot checks, not for measuring.
+
+Without ad spend Planner returns ranges rather than exact numbers. Store each bucket's lower bound and keep the range name beside it, or a range quietly outranks a measured figure.
+
+**Close variants are one search.** Google gives them the same volume, so they merge before anything counts them — and a close variant of a page you already have gets wording on that page, never a page of its own. The second page competes with the first and reads as a doorway.
+
+**The keyword filter is config, not code.** Written in English it silently discards whole markets, so it lives in a per-project file with media words in every target language.
+
 **Keywords start from the product's own capabilities**, not from a seed term. Every feature and every settings option is somebody's search. Capabilities that work and have no page are the highest-return tier there is: no build risk, demand already proven, just a missing page.
 
 **Nothing gets built until its code path is verified.** A keyword the product cannot actually serve is a reject, not a low priority.
@@ -53,6 +61,10 @@ Standard library only, no dependencies.
 |---|---|
 | `scripts/audit.py` | robots.txt and AI crawler access, JS render test, sitemap, PageSpeed, schema, duplicate-body detection across the whole sitemap |
 | `scripts/lint.py` | per-page on-page rules — the three kings, FAQ answer openers, AI-writing tells, link resolution — with autofix where it is safe |
+| `scripts/kwlib.py` | shared keyword handling — normalising, merging close variants, classifying against the page plan |
+| `scripts/planner_import.py` | turns a Google Keyword Planner export into a clean CSV, range buckets and all |
+| `scripts/gap_report.py` | searches with volume that no page targets, plus the open-gap test against competitors |
+| `scripts/variant_map.py` | decides which existing page absorbs a variant, and what on that page to leave alone |
 | `scripts/plan_check.py` | gates the page plan — every page must carry its keyword in the title, H1 and opening line before anything is written |
 | `scripts/review.py` | ranks what to improve next from a Search Console CSV export |
 
@@ -74,4 +86,4 @@ Outreach sends, Reddit posting, responses to negative reviews, anything involvin
 
 ## Where it came from
 
-Distilled from 26 SEO video transcripts, then corrected against a live project. Several widely repeated rules did not survive that — the publishing ramp traced back to an uncited caveat, and the Indexing API only accepts job postings and livestreams rather than ordinary pages. The contradictions between sources are documented rather than smoothed over.
+Distilled from 26 recorded SEO talks, then corrected against a live project. Several widely repeated rules did not survive that — the publishing ramp traced back to an uncited caveat, and the Indexing API only accepts job postings and livestreams rather than ordinary pages. The contradictions between sources are documented rather than smoothed over.
